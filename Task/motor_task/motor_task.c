@@ -31,7 +31,7 @@ void CHASSIS_TASK(void)
 	uint8_t data_r[4]={0};  //SPI接收数据，即角度数据
 	uint16_t i;
 	int angle;
-	int angle____set = 299;
+	int angle____set = 274;
 	int angle_slove;
 	int my_start_all_ecd;
 	int flag_2006_all_ecd = 0;
@@ -143,7 +143,7 @@ void chassis_rc_slove(CHASSIS *_chassis)
 		_chassis->motor_2006.target_angle = my_start_all_ecd;
 	
 	}//后右
-	else if(vw == 0 &&  atan2(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) > 92 )//要改数值可能
+	else if(atan2(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) > 92 )//要改数值可能
 	{
 		_chassis->motor_3508.target_rpm = - sqrtf(powf(vx+cos45*vw,2) + powf(vy-cos45*vw,2)) * speed_enlarge;	
 
@@ -153,7 +153,7 @@ void chassis_rc_slove(CHASSIS *_chassis)
 
 
 	}//后左
-	else if(vw == 0 && -atan2(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) > 92	)
+	else if( -atan2(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) > 92	)
 	{
 
 		_chassis->motor_3508.target_rpm = - sqrtf(powf(vx+cos45*vw,2) + powf(vy-cos45*vw,2)) * speed_enlarge;	
@@ -162,7 +162,7 @@ void chassis_rc_slove(CHASSIS *_chassis)
 		_chassis->motor_2006.target_angle = - (atan2f(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) + 180)*(572839.0/180) + my_start_all_ecd;
 
 	}
-	else if(vw > 0)//右旋
+	else if(vw > 0 && vx == 0 && vy == 0)//右旋
 	{
 
 		_chassis->motor_3508.target_rpm = - sqrtf(powf(vx+cos45*vw,2) + powf(vy-cos45*vw,2)) * speed_enlarge;	
@@ -171,7 +171,7 @@ void chassis_rc_slove(CHASSIS *_chassis)
 		_chassis->motor_2006.target_angle = - (atan2f(vx+cos45*vw,vy-cos45*vw)*(180/3.14159) - 180)*(572839.0/180) + my_start_all_ecd;
 
 	}
-	else if(vw < 0)//左旋
+	else if(vw < 0 && vx == 0 && vy == 0)//左旋
 	{
 
 		_chassis->motor_3508.target_rpm =   sqrtf(powf(vx+cos45*vw,2) + powf(vy-cos45*vw,2)) * speed_enlarge;	
@@ -181,7 +181,7 @@ void chassis_rc_slove(CHASSIS *_chassis)
 
 	}
 	else{
-
+                                                                                                                       
 	  _chassis->motor_3508.target_rpm =   sqrtf(powf(vx+cos45*vw,2) + powf(vy-cos45*vw,2)) * speed_enlarge;	
 
 
